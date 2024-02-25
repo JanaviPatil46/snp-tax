@@ -139,7 +139,7 @@ const SidebarItems = [
       },
       {
         title: "Tags",
-        path: "/tags",
+        path: "/newtag",
         icon: <FiHome />,
       },
       {
@@ -198,4 +198,3 @@ const SidebarItems = [
 ];
 
 export default SidebarItems;
-{/* <MdOutlinePayments /> */}

@@ -63,6 +63,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
+
 const Tag = () => {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -133,7 +134,14 @@ const Tag = () => {
   };
 
   return (
-    <div>
+    <>
+    
+    <div className="tag-header " style={{display:'flex'}}>
+      <h4>Tags</h4>
+      <button>New Tag</button>
+    </div>
+    
+    <div style={{border:'1px solid black'}}>
       <Select
         options={options}
         components={animatedComponents}
@@ -145,6 +153,7 @@ const Tag = () => {
         styles={customStyles}
       />
     </div>
+    </>
   );
 };
 

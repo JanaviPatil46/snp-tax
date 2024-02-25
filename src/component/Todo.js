@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { SlCalender } from "react-icons/sl";
 import { LuUserCircle2 } from "react-icons/lu";
 import DatePicker from 'react-datepicker';
+import Users from './Users';
+import './todo.css'
 import 'react-datepicker/dist/react-datepicker.css';
 const Todo = () => {
     const [calendarOpen, setCalendarOpen] = useState(false);
@@ -15,6 +17,37 @@ const Todo = () => {
         setSelectedDate(date);
         setCalendarOpen(true);
     };
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    // const [selectedDate, setSelectedDate] = useState(null); // State to store selected date
+    const itemsPerPage = 5;
+  
+    // Function to filter data based on search term and selected date
+    const filteredData = Users.filter((row) => {
+      const searchTermMatch =
+        row.task.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.client.toString().includes(searchTerm.toLowerCase());
+  
+      const dateMatch =
+        selectedDate === null || // if no date is selected, all dates should match
+        new Date(row.startDate).toDateString() === selectedDate.toDateString();
+  
+      return searchTermMatch && dateMatch;
+    });
+  
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
+    // Function to handle date selection
+    const handleDateSelect = (date) => {
+      setSelectedDate(date);
+    };
+  
     return (
         <>
             <div className='todo-task col-12' style={{ display: 'flex' }}>
@@ -54,51 +87,54 @@ const Todo = () => {
             <div className='tables-container col-12'>
                 <div className='task-table col-9' style={{ marginTop: '30px' }}>
                     <div className='table-container col-12'>
-                        <table className="col-12" >
-                            <tr>
-                                <th className='col-4' style={{ textAlign: 'left' }}>TASK</th>
-                                <th className='col-2' style={{ textAlign: 'left' }}>CLIENT</th>
-                                <th className='col-2' style={{ textAlign: 'left' }}>START</th>
-                                <th className='col-2' style={{ textAlign: 'left' }}>DUE</th>
-                                <th className='col-2' style={{ textAlign: 'left' }}>STATUS</th>
-                            </tr>
-                            <tr className="col-12">
-                                <td className='col-4' style={{ padding: '9px 9px 9px 0' }}>SNP-EN(US)Team Lead Review</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}></td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Jan-05-203</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Jan-08-2023</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}><button className='col-6' style={{ borderRadius: '10px' }}>No status</button></td>
-                            </tr>
-                            <tr className="col-12">
-                                <td className='col-4' style={{ padding: '9px 9px 9px 0' }}>SNP-EN(US)File Extension</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}></td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Jan-06-2023</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Jan-08-2023</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}><button className='col-6' style={{ borderRadius: '10px' }}>No status</button></td>
-                            </tr>
-                            <tr className="col-12">
-                                <td className='col-4' style={{ padding: '9px 9px 9px 0' }}>Biz Formation-Prepare & Apply for EIN Number-Task</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}></td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Nov-03-2023</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Nov-03-2023</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}><button className='col-6' style={{ borderRadius: '10px' }}>No status</button></td>
-                            </tr>
-                            <tr className="col-12">
-                                <td className='col-4' style={{ padding: '9px 9px 9px 0' }}>SNP-EN(US)Team Lead Review</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}></td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Feb-06-2024</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Feb-09-2023</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}><button className='col-6' style={{ borderRadius: '10px' }}>No status</button></td>
-                            </tr>
-                            <tr className="col-12">
-                                <td className='col-4' style={{ padding: '9px 9px 9px 0' }}>SNP-EN(US)Team Lead Review</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}></td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Feb-06-2024</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}>Feb-09-2023</td>
-                                <td className='col-2' style={{ padding: '9px 9px 9px 0' }}><button className='col-6' style={{ borderRadius: '10px' }}>No status</button></td>
-                            </tr>
+                        <div>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                {/* Date Picker */}
+                                {/* <DatePicker
+                                    selected={selectedDate}
+                                    onChange={handleDateSelect}
+                                    dateFormat="yyyy-MM-dd"
+                                    // placeholderText="Select Date"
+                                /> */}
+                            </div>
+                            <table className="my-table">
+                                <thead>
+                                    <tr>
 
-                        </table>
+                                        <th>Task</th>
+                                        <th>Client</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentItems.map((row) => (
+                                        <tr key={row.id}>
+                                            <td>{row.task}</td>
+                                            <td>{row.client}</td>
+                                            <td>{row.startDate}</td>
+                                            <td>{row.endDate}</td>
+                                            <td>{row.status}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {/* Pagination */}
+                            <div className="pagination">
+                                {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }).map((_, index) => (
+                                    <button key={index} onClick={() => paginate(index + 1)}>
+                                        {index + 1}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

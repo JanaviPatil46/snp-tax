@@ -6,7 +6,7 @@ function Contact({ handleContactClose }) {
   return (
     <div className="createContact">
       <div className="header_title">
-        <button type="button" onClick={() => handleContactClose()}>
+        <button type="button" onClick={() => handleContactClose()}><q></q>
           <RxCross2 />
         </button>
         <div className="title col-4">Contact</div>
